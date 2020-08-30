@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+
+<HTML>
+	<head> 
+		<style>
+			table{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+			h1, h2, h3, h4 {
+				font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+;
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+		</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+	
+		<script>
+			var FINALUSER = "";
+			var loggedin = 0;
+			function displayHome(){
+				if (loggedin == 1) {
+					document.getElementById('content').innerHTML = "<div style=\"text-align:center; vertical-align: middle;\"><div style=\"margin:auto; width:30%; vertical-align: middle;\"><center><img src='./dragonquiz.png' style='width:500px'></center>" +
+					"<br>"+ "<button onclick=\"displayQuestions()\">Questions</button><br><br><button onclick=\"displayLeaders()\">Leaderboard</button><br>" +
+					"<br>";
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+				}
+			}
+			function submit(){
+				var user = document.getElementById("username").value;
+				FINALUSER = user;
+				var pw = document.getElementById("password").value;
+				params = {
+					username : user,
+					password1 : pw
+				};
+				
+				var URL = "./login"
+				$.ajax({
+					type: "POST",
+					url: URL,
+					dataType: "text",
+					data: params,
+					success : function(msg){
+						loggedin = 1;
+						displayHome();
+						//document.getElementById("content").innerHTML = user;
+					},
+					error: function(jgXHR, textStatus, errorThrown) {
+						alert("Error: " + textStatus + errorThrown);
+						}
+				});
+			}
+			
+			function tech(){				
+				//Call to get Question and answer
+				
+				document.getElementById('content').innerHTML = "<center><h1><b><u> TECHNOLOGY </u></b></h1></center>";
+				document.getElementById('content').innerHTML += "<center><h2><b> Question: " + "Question goes here" + "</b></h2></center>";
+				document.getElementById('content').innerHTML += "<br>" + "<center><input type='text' name='userGuess'>" + "<br><br>" + "<button id='submit' onclick='check()'> Submit </button></center>";
+			}
+			
+			function displayQuestions(){
+				if (loggedin == 1) {
+					document.getElementById('content').innerHTML = "<h2><b><u><center>Questions</center></u></b></h2>"+
+					"<center>"+
+					"<h3><u> Technology </u></h3>"+
+					"<button id='button' onclick='tech()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> General Knowledge </u></h3>"+
+					"<button id='button' onclick='general()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> History </u></h3>"+
+					"<button id='button' onclick='history()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> Sports </u></h3>"+
+					"<button id='button' onclick='sports()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> Science </u></h3>"+
+					"<button id='button' onclick='science()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='1000'> 1000 pts </button>"+ " "+
+					"</center>";
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+				}
+			}
+			///////////////////////////////////////////////////////
+			function displayLeaders(){
+				if (loggedin == 1) {
+					$.ajax({
+						type: "POST",
+						url: "./leaderboard",
+						success: function(msg){
+							var results = "<div style=\"text-align:center; vertical-align: middle;\"><div style=\"margin:auto; width:40%; vertical-align: middle;\"><h2>Leaderboard</h2><table><tr><th>Player</th><th>Total Points</th></tr>";
+							for (i=0; i<msg.length; i++) {
+								row = "<tr><td>" + msg[i][0] + "</td><td>" + msg[i][1] + "</td></tr>";
+								results = results + row;
+							}
+							results = results + "</table></div></div>";
+							document.getElementById("content").innerHTML = results;
+						},
+						error: function(jgXHR, textStatus,errorThrown){
+							alert("Error: " + textStatus + " " + errorThrown);
+						}
+					});
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+				}
+			}
+			///////////////////////////////////////////////////////////
+			function displayHelp(){
+				document.getElementById("content").innerHTML = "For further questions please call 1-800-DRAGNQZ or email us at Help@DragonQuiz.org"
+			}
+		</script>
+	
+	</head>
+	<body>
+		<div data-role="page" id="page" data-theme="b">
+		<!-- A jQuery Mobile Header w/ Title and menu-->
+			<div data-role="header" data-position="fixed" >
+				<h1>DRAGON QUIZ</h1>
+				<a href="#myPanel"> Menu </a>
+			</div>
+			
+			<div data-role="panel" id="myPanel" data-display="push" >
+				<!--<h2><u>@USERNAME</u></h2><p>#Points</p>-->
+				<br>
+				<a href="#" onclick="displayHome()" data-role="button" data-rel="close"> Home </a>
+				<a href="#" onclick="displayQuestions()" data-role="button" data-rel="close"> Questions </a>
+				<a href="#" onclick="displayLeaders()" data-role="button" data-rel="close"> Leaderboard </a>
+				<a href="#" onclick="displayHelp()" data-role="button" data-rel="close"> Help </a>
+			</div>
+		
+		<!-- A Content Area -->
+			<div data-role="content" id="content" >
+				<div style="text-align:center; vertical-align: middle;">
+				<div style="margin:auto; width:30%; vertical-align: middle;">
+				<div id="login_error"></div>
+				<center><p><b>WELCOME</b><p></center>
+				
+				<input type="text" id = "username" style="border: 1px solid #ccc;" placeholder="Username"/>
+				<input type="password" id = "password" style="border: 1px solid #ccc;" placeholder="Password"/>
+				<button onclick="submit()">Login</button>
+				</div>
+				</div>
+			</div>
+		
+		<!-- A jQuery Mobile Footer w/ Name -->		
+			<div data-role="footer" data-position="fixed" >
+				<h4>Brandin Bulicki, Briana Schuetz, Dennis Lougharn, Isaiah Noble</h4>
+			</div>	
+		</div>
+	
+	</body>
+
+</HTML>

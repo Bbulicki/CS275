@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+
+<HTML>
+	<head> 
+		<style>
+			table{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+			h1, h2, h3, h4 {
+				font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+;
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+		</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+	
+		<script>
+			function existing(){
+				window.location = "."
+			}
+			function newuser() {
+				var name = document.getElementById("name").value;
+				var pw = document.getElementById("password").value;
+				params = {
+					username : name,
+					password1 : pw
+				};
+				var URL = "./createuser"
+				$.ajax({
+					type: "POST",
+					url: URL,
+					dataType: "text",
+					data: params,
+					success: function(msg){
+						if (msg == "."){
+							window.location = msg;
+						}
+						else{
+							alert("Invalid/existing username or password");
+						}
+				}});
+			}
+		</script>
+	
+	</head>
+	<body>
+		<div data-role="page" id="page" data-theme="b">
+		<!-- A jQuery Mobile Header w/ Title and menu-->
+			<div data-role="header" data-position="fixed" >
+				<h1>DRAGON QUIZ</h1>
+			</div>
+			<div data-role="content" id="content" >
+				<div style="text-align:center; vertical-align: middle;">
+				<div style="margin:auto; width:30%; vertical-align: middle;">
+				<img src="./dragonquiz.png" style="width:400px">
+				<h3>Register:</h3>
+				<input type="text" id="name" style="border: 1px solid #ccc;" placeholder="Username">
+				<input type="password" id="password" style="border: 1px solid #ccc;" placeholder="Password">
+				<button onclick="newuser()">Submit</button>
+				<button onclick="existing()">Already have an account?</button>
+				<div id="success"></div>
+				</div>
+				</div>
+			</div>	
+			<div data-role="footer" data-position="fixed" >
+				<h4>Brandin Bulicki, Briana Schuetz, Dennis Lougharn, Isaiah Noble</h4>
+			</div>	
+		</div>
+	
+	</body>
+
+</HTML>

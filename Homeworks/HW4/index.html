@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+
+<html>
+
+
+<head> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+
+<script>
+	function displayCalc(){
+		var URL = "http://localhost:8080/renCalc";
+		
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{}",
+			datatype: "html",
+			success: function(msg)
+			{
+				$('#content').html(msg);
+			},
+			error: function()
+			{
+				alert("Error 404 : Cannot reach server");
+			}
+		});	
+	}
+	
+		function displayWeather(){
+		var URL = "http://localhost:8080/renWeather";
+		
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{}",
+			datatype: "html",
+			success: function(msg)
+			{
+				$('#content').html(msg);
+			},
+			error: function()
+			{
+				alert("Error 404 : Cannot reach server");
+			}
+		});	
+	}
+</script>
+</head>
+
+
+	<div data-role="page" id="page">
+	
+	<!-- A jQuery Mobile Header w/ assignment and menu-->
+		<div data-role="header" data-position="fixed">
+			<h1>Assignment 4</h1>
+			<a href="#myPanel"> Menu </a>
+		</div>
+		
+		<div data-role="panel" id="myPanel" data-display="overlay">
+			<a href="." data-role="button" data-rel="close"> Home </a>
+			<a href="#" onclick="displayCalc()" data-role="button" data-rel="close"> Calculator </a>
+			<a href="#" onclick="displayWeather()" data-role="button" data-rel="close"> Weather </a>
+		</div>
+	
+	<!-- A Content Area -->
+		<div data-role="content" id="content">
+			<p><b>1.Click the Menu <br>
+			2.Click on the Module that you want to run <br>
+				For the Calculator: <br></b>
+					Insert Seed Number <br>
+					Choose Computation <br>
+					Click Compute <br>
+				<b>For the Weather: <br></b>
+					To see the hourly weather forecast, the user can enter their key in the text field provided and then click on the submit key button.
+				<br>	If the key is correct and the zipcode is acceptable, hourly weather forecast of the current location will be displayed in a table below.
+				<br>	If the key is incorrect, a message will appear saying that the page could not be reached.
+			</p>
+		</div>
+	
+	<!-- A jQuery Mobile Footer w/ Name -->		
+		<div data-role="footer" data-position="fixed">
+			<h4>Brandin Bulicki</h4>
+		</div>	
+	</div>
+	
+	
+
+
+
+</html>

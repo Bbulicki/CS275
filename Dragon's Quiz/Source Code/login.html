@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HW5</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+		<script>
+			function logina() {
+				var user = document.getElementById("username").value;
+				var pw = document.getElementById("password").value;
+				params = {
+					username: user,
+					pw: pw
+				};
+				$.ajax({
+					type: "POST",
+					url: "./logina",
+					data: params,
+					success: function(msg){
+						document.getElementById("success").innerHTML = msg;
+					},
+					error: function(jgXHR, textStatus,errorThrown){
+						alert("Error: " + textStatus + " " + errorThrown);
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<br>
+		<h3>Login:</h3>
+		<p>Username</p><input type="text" id="username">
+		<p>Password</p><input type="password" id="password">
+		<button onclick="logina()">Login</button>
+		<div id="success"></div>
+		<br>
+		</div>
+	</body>
+</html>

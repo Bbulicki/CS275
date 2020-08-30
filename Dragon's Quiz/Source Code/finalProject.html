@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+
+<HTML>
+	<head> 
+		<style>
+			table{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+
+			tr:nth-child(even) {
+				background-color: #dddddd;
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+		</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+	
+		<script>
+			function displayHome(){ 
+				document.getElementById('content').innerHTML = "<center><h1><u>WELCOME TO DRAGON QUIZ!!!</u></h1></center>" +
+					"<br>"+
+					"<center><h3>Please navigate using the side menu</h3></center>" +
+					"<br>" +
+					"<center><img src='https://st.depositphotos.com/1036149/4678/i/950/depositphotos_46784509-stock-photo-smart-dragon.jpg' style='width:250px;height:300px;'></center>";
+			}
+		
+			function submit(){
+				var user = document.getElementById("username").value;
+				var pw = document.getElementById("password").value;
+				params = {
+					username : user,
+					password1 : pw
+				};
+				
+				var URL = "./login"
+				$.ajax({
+					type: "POST",
+					url: URL,
+					dataType: "text",
+					data: params,
+					success : function(msg){
+						document.getElementById("content").innerHTML = "Display Profile";
+					},
+					error: function(jgXHR, textStatus, errorThrown) {
+						alert("Error: " + textStatus + errorThrown);
+						}
+				});
+			}
+			
+			function tech(){				
+				//Call to get Question and answer
+				
+				document.getElementById('content').innerHTML = "<center><h1><b><u> TECHNOLOGY </u></b></h1></center>";
+				document.getElementById('content').innerHTML += "<center><h2><b> Question: " + "Question goes here" + "</b></h2></center>";
+				document.getElementById('content').innerHTML += "<br>" + "<center><input type='text' name='userGuess'>" + "<br><br>" + "<button id='submit' onclick='check()'> Submit </button></center>";
+			}
+			
+			function displayQuestions(){
+				document.getElementById('content').innerHTML = "<h2><b><u><center>Questions</center></u></b></h2>"+
+					"<center>"+
+					"<h3><u> Technology </u></h3>"+
+					"<button id='button' onclick='tech()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='tech()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> General Knowledge </u></h3>"+
+					"<button id='button' onclick='general()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='general()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> History </u></h3>"+
+					"<button id='button' onclick='history()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='history()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> Sports </u></h3>"+
+					"<button id='button' onclick='sports()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='sports()' value='1000'> 1000 pts </button>"+ " "+
+					"<br>"+
+					"<br>"+
+					"<h3><u> Science </u></h3>"+
+					"<button id='button' onclick='science()' value='200'> 200 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='400'> 400 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='800'> 800 pts </button>"+ " "+
+					"<button id='button' onclick='science()' value='1000'> 1000 pts </button>"+ " "+
+					"</center>";
+			}
+			
+			function displayLeaders(){
+				document.getElementById("content").innerHTML = "<h2><u><center>LEADERBOARD</center></u></h2>"+
+				"<table>"+
+				  "<tr>"+
+					"<th><center>Rank</center></th>"+
+					"<th><center>Username</center></th>"+
+					"<th><center>Points</center></th>"+
+				  "</tr>"+
+				  "<tr>"+
+					"<td><center>1</center></td>"+
+					"<td><center>Brandin Bulicki</center></td>"+
+					"<td><center>7000</td>"+
+				  "</tr>"+
+				  "<tr>"+
+					"<td><center>2</center></td>"+
+					"<td><center>Briana Schuetz</center></td>"+
+					"<td><center>6480</td>"+
+				  "</tr>"+
+				  "<tr>"+
+					"<td><center>3</center></td>"+
+					"<td><center>Dennis Lougharn</center></td>"+
+					"<td><center>6470</center></td>"+
+				  "</tr>"+
+				  "<tr>"+
+					"<td><center>4</center></td>"+
+					"<td><center>Isaiah Noble</center></td>"+
+					"<td><center>6290</center></td>"+
+				  "</tr>"+
+				"</table>"+
+				"<h3><b><center>THIS IS TEST DATA</center></b></h3>";
+			}
+			
+			function displayHelp(){
+				document.getElementById("content").innerHTML = "For further questions please call 1-800-DRAGNQZ or email us at Help@DragonQuiz.org"
+			}
+		</script>
+	
+	</head>
+	<body>
+		<div data-role="page" id="page" data-theme="b">
+		<!-- A jQuery Mobile Header w/ Title and menu-->
+			<div data-role="header" data-position="fixed" >
+				<h1>DRAGON QUIZ</h1>
+				<a href="#myPanel"> Menu </a>
+			</div>
+			
+			<div data-role="panel" id="myPanel" data-display="push" >
+				<h2><u>@USERNAME</u></h2><p>#Points</p>
+				<br>
+				<a href="#" onclick="displayHome()" data-role="button" data-rel="close"> Home </a>
+				<a href="#" onclick="displayQuestions()" data-role="button" data-rel="close"> Questions </a>
+				<a href="#" onclick="displayLeaders()" data-role="button" data-rel="close"> Leaderboard </a>
+				<a href="#" onclick="displayHelp()" data-role="button" data-rel="close"> Help </a>
+			</div>
+		
+		<!-- A Content Area -->
+			<div data-role="content" id="content" >
+				<center><p><b><u>WELCOME TO DRAGON QUIZ</u></b><p></center>
+				
+				<input type="text" id = "username" />
+				<input type="password" id = "password" />
+				<button onclick="submit()">Login</button>
+				
+			</div>
+		
+		<!-- A jQuery Mobile Footer w/ Name -->		
+			<div data-role="footer" data-position="fixed" >
+				<h4>Brandin Bulicki, Briana Schuetz, Dennis Lougharn, Isaiah Noble</h4>
+			</div>	
+		</div>
+	
+	</body>
+
+</HTML>

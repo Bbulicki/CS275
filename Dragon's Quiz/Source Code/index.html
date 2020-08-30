@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+
+<HTML>
+	<head> 
+		<style>
+			table{
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+		</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+	
+		<script>
+			var FINALUSER = "";
+			var loggedin = 0;
+			function displayHome(){
+				if (loggedin == 1) {
+					document.getElementById('content').innerHTML = "<div style=\"text-align:center; vertical-align: middle;\"><div style=\"margin:auto; width:30%; vertical-align: middle;\"><center><img src='./dragonquiz.png' style='width:500px'></center>" +
+					"<br>"+ "<button onclick=\"displayQuestions()\">Questions</button><br><br><button onclick=\"displayLeaders()\">Leaderboard</button><br>" +
+					"<br>";
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+				}
+			}
+			function submit(){
+				var user = document.getElementById("username").value;
+				FINALUSER = user;
+				var pw = document.getElementById("password").value;
+				params = {
+					username : user,
+					password1 : pw
+				};
+				var URL = "./login"
+				$.ajax({
+					type: "POST",
+					url: URL,
+					dataType: "text",
+					data: params,
+					success : function(msg){
+						if (msg == "1"){
+							loggedin = 1;
+							displayHome();
+						}
+						else{
+						alert("Invalid username or password!");
+						}
+						//document.getElementById("content").innerHTML = user;
+					},
+					error: function(jgXHR, textStatus, errorThrown) {
+						alert("Error: " + textStatus + errorThrown);
+						}
+				});
+			}
+			function hint(answer){
+				document.getElementById("hbutton").style.visibility="hidden";
+				document.getElementById("hbutton").innerHTML = true;
+				var hintlength = answer.length / 2;
+				var hintslice = answer.slice(0, hintlength);
+				document.getElementById("statement").innerHTML = hintslice;
+			}
+			function answerhandle(answer,value){
+				var guess = document.getElementById("ans").value;
+				var hintbool = document.getElementById("hbutton").value;
+				if (hintbool = true){
+					value = value / 2;
+				}
+				if (guess.toLowerCase() == answer.toLowerCase()){
+					$.ajax({
+						type: "GET",
+						url: "./pointsadd?points="+value+"&user="+FINALUSER,
+						dataType: "text",
+						success : function(msg){
+							document.getElementById("cat_drop").style.visibility="visible";
+							document.getElementById("v_drop").style.visibility="visible";
+							document.getElementById("qbutton").style.visibility="visible";
+							document.getElementById("abutton").style.visibility="hidden";
+							document.getElementById("hbutton").style.visibility="hidden";
+							document.getElementById("hbutton").innerHTML = false;
+							document.getElementById("statement").innerHTML = msg;
+						},
+						error: function(jgXHR,textStatus,errorThrown){
+							alert("Error: " + textStatus + " " + errorThrown);
+						}
+					});
+				}
+				else{
+					$.ajax({
+						type: "GET",
+						url: "./pointsreduce?points="+value+"&user="+FINALUSER,
+						dataType: "text",
+						success : function(msg){
+							document.getElementById("cat_drop").style.visibility="visible";
+							document.getElementById("v_drop").style.visibility="visible";
+							document.getElementById("qbutton").style.visibility="visible";
+							document.getElementById("abutton").style.visibility="hidden";
+							document.getElementById("hbutton").style.visibility="hidden";
+							document.getElementById("statement").innerHTML = msg;
+						},
+						error: function(jgXHR,textStatus,errorThrown){
+							alert("Error: " + textStatus + " " + errorThrown);
+						}
+					});
+				}
+			}
+			function getqa(){
+				var rt = document.getElementById("display");
+				var category = document.getElementById("cat_drop").value;
+				var pointValue = document.getElementById("v_drop").value;
+				document.getElementById("cat_drop").style.visibility="hidden";
+				document.getElementById("v_drop").style.visibility="hidden";
+				document.getElementById("qbutton").style.visibility="hidden";
+				var URL = "./qa?id=" + category;
+				$.ajax({
+					type: "GET",
+					url : URL,
+					contentType: "application/json; charset=utf-8",
+					dataType : 'json',
+					success : function(msg){
+						rt.innerHTML = '';
+						var json = msg;
+						var q = json.question;
+						var a = JSON.stringify(json.answer);
+						var i = [String(a)];
+						rt.innerHTML += "Question: " + q + "<br/>";
+						rt.innerHTML += "<input type="+'text'+" id="+'ans'+"><br/>";
+						rt.innerHTML += "<div id="+"statement"+"></div>"
+						var func1 = 'answerhandle('+i+','+pointValue+")";
+						var func2 = 'hint('+i+")";
+						rt.innerHTML += "<button id=abutton onclick="+"'"+func1+"'"+'>Answer</button>';
+						rt.innerHTML += "<button value=false id=hbutton onclick="+"'"+func2+"'"+">Hint</button>";
+					},
+					error: function(jgXHR,textStatus,errorThrown){
+						alert("Error: " + textStatus + " " + errorThrown);
+					}
+					});
+			}
+			
+			function displayQuestions(){
+				if (loggedin == 1) {
+					document.getElementById('content').innerHTML = "<h2><b><u><center>Questions</center></u></b></h2><select id="+'cat_drop'+"><option value=348>Technology</option><option value=1546>General</option><option value=114>History</option><option value=42>Sports</option><option value=25>Science</option></select>"+
+					"<br><select id="+'v_drop'+"><option value=100>100</option><option value=200>200</option><option value=300>300</option><option value=400>400</option><option value=500>500</option><option value=600>600</option><option value=700>700</option><option value=800>800</option><option value=900>900</option><option value=1000>1000</option></select><br>"+
+					"<button id =qbutton onclick="+'getqa()'+">Get Question</button>"+
+					"<div id = "+'display'+"></display>"
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+				}
+			}
+			
+			function displayLeaders(){
+				if (loggedin == 1) {
+					$.ajax({
+						type: "POST",
+						url: "./leaderboard",
+						success: function(msg){
+							var results = "<div style=\"text-align:center; vertical-align: middle;\"><div style=\"margin:auto; width:40%; vertical-align: middle;\"><h2>Leaderboard</h2><table id = leaders><tr><th>Player</th><th>Total Points</th></tr>";
+							for (i=0; i<msg.length; i++) {
+								row = "<tr><td>" + msg[i][0] + "</td><td>" + msg[i][1] + "</td></tr>";
+								results = results + row;
+							}
+							results = results + "</table></div></div>";
+							document.getElementById("content").innerHTML = results;
+						},
+						error: function(jgXHR, textStatus,errorThrown){
+							alert("Error: " + textStatus + " " + errorThrown);
+						}
+						});
+				}
+				else {
+					document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+					}	
+			}
+			function displayHelp(){
+			if (loggedin == 1) {
+				document.getElementById("content").innerHTML = "<div style=\"vertical-align: middle;\"><div style=\"margin:auto; width:40%; vertical-align: middle;\"><hr style=\"height:3px;color:#6e209d;border-style:solid;\"><h2>Have any questions or comments for us?</h2><h4>Fill out the form below and we'll get back to you!</h4><input placeholder=\"Name\"><br><br><input placeholder=\"Email\"><br><br><textarea cols=\"60\" rows=\"5\" placeholder=\"Comments\"></textarea><br><br><button>Submit</button><p>For further questions please call 1-800-DRAGNQZ or email us at Help@DragonQuiz.org.</p><br><hr style=\"height:3px;color:#6e209d;border-style:solid;\"></div></div>"
+			}
+			else {
+				document.getElementById("login_error").innerHTML = "<h3 style=\"color:red;\">Please log in.</h3>";
+			}
+			}
+			function noaccount(){
+				window.location = "./signup.html";
+			}
+		</script>
+	
+	</head>
+	<body>
+		<div data-role="page" id="page" data-theme="b">
+		<!-- A jQuery Mobile Header w/ Title and menu-->
+			<div data-role="header" data-position="fixed" >
+				<h1>DRAGON QUIZ</h1>
+				<a href="#myPanel"> Menu </a>
+			</div>
+			
+			<div data-role="panel" id="myPanel" data-display="push" >
+				<!--<h2><u>@USERNAME</u></h2><p>#Points</p>-->
+				<br>
+				<a href="#" onclick="displayHome()" data-role="button" data-rel="close"> Home </a>
+				<a href="#" onclick="displayQuestions()" data-role="button" data-rel="close"> Questions </a>
+				<a href="#" onclick="displayLeaders()" data-role="button" data-rel="close"> Leaderboard </a>
+				<a href="#" onclick="displayHelp()" data-role="button" data-rel="close"> Help </a>
+			</div>
+		
+		<!-- A Content Area -->
+			<div data-role="content" id="content" >
+				<div style="text-align:center; vertical-align: middle;">
+				<div style="margin:auto; width:30%; vertical-align: middle;">
+				<div id="login_error"></div>
+				<center><p><b>WELCOME</b><p></center>
+				
+				<input type="text" id = "username" style="border: 1px solid #ccc;" placeholder="Username"/>
+				<input type="password" id = "password" style="border: 1px solid #ccc;" placeholder="Password"/>
+				<button onclick="submit()">Login</button>
+				<button onclick="noaccount()">Don't have an account? Click here</button>
+				</div>
+				</div>
+			</div>
+		
+		<!-- A jQuery Mobile Footer w/ Name -->		
+			<div data-role="footer" data-position="fixed" >
+				<h4>Brandin Bulicki, Briana Schuetz, Dennis Lougharn, Isaiah Noble</h4>
+			</div>	
+		</div>
+	
+	</body>
+
+</HTML>

@@ -1,0 +1,96 @@
+<!--
+Brandin Bulicki
+CS270-003
+Fibonacci Sequence
+-->
+
+<html>
+	<!--Prepare table style-->
+	<style>
+		table, td, th{
+			border: 1px solid black;
+		}
+	</style>
+	
+	<!--Create Title for Webpage-->
+	<title>
+		The Fibonacci Sequence	
+	</title>
+	
+	<!-- Add content to the page-->
+	<h1 align="center">
+		<b><u> The Fibonacci Sequence </u></b>
+	</h1>
+	<center><img align="center" src="http://blog.tradesmartonline.in/wp-content/uploads/2014/09/Fibonacci-Series1.bmp" alt="FibSeq"></img></center>
+	<h2 align="center">
+		<u>History of the Fibonacci Sequence</u>
+	</h2>
+	<p align="left">
+		The Fibonacci sequence is a collection of numbers where current number is found by the sum of all the numbers that preceed it.  The sequence begins with 0 and 1 and continues by adding the current number and the previous number together (As seen in the picture above).  This can be written as the following equation: 
+		next = current + previous.  This sequence has lead to many more discoveries, such as the golden ratio and spiral.  These two discoveries from this sequence has been found to occur nature for an unknown reason.
+	</p>
+	<p align="left">
+		The sequence gets its name from Leonardo Pisano (Fibonacci).  He introduced the concept of these numbers in his Liber abaci, or book of tables, in 1202.  Being a trader, Fibonacci held math high in importance.
+		Because of this, he died the Hindu-Arabic arithmetic system, which is said to be where numbers first originated.  Having such knowledge of numbers, something most of the European world was not well learned in, having no prior understanding of decimals or more complex arithmetic,
+		he was able to create this sequence.
+	</p>
+	<h2 align="center">
+		<u>Instructions</u>
+	</h2>
+	<center>
+	<p>
+		<li>Type in your desired number in the sequence.</li>
+		<li>Click the button to calculate up through that value</li>
+	</p>
+	
+	<input type="number" id="input">
+	<button id="compute" onclick="doComp()">Compute!</button>
+	<br></br>
+	<div id="divId"></div>
+	</center>
+	
+	<!-- Run Javascript -->
+	<script>
+
+			
+		var out = document.getElementById("divId");
+		
+		//Make a Function to complete computation
+		function doComp(){
+			var f1 = 0;
+			var f2 = 1;
+			var temp;
+			var i = 0;
+			
+			//retrieve user input
+			var n = document.getElementById("input").value;
+			
+			
+			if (n >= 0) {
+				
+				//Set up the table
+				out.innerHTML = '<table width="100%"><tbody><tr><th>n</th><th width="50%">fib(n)</th></tr>';
+			
+				//Add rows until reaching user desired int
+				while (i <= n) {
+				
+					//Add row to output
+					out.innerHTML = out.innerHTML + '<table width="100%"><tr><td style:"width:100%"><center>' + i + '</center></td><td width="50%"><center>' + f1 + '</center></td></tr>';
+					out.innerHTML = out.innerHTML + "</tbody></table>"
+				
+					//Prepare next in sequence
+					temp = f1;
+					f1 = f1 + f2;
+					f2 = temp;
+					
+					i++; //Iterate
+				}
+			} else if (n < 0) { //If negative output the issue
+				out.innerHTML = "Cannot compute the Fibonacci Sequence of a negative integer."
+			} else { //If invalid input do the following
+				out.innerHTML = "Invalid Input"
+			}
+			
+		}		
+	</script>
+</html>

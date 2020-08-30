@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lab 5</title>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"> 
+		</script> <link type="text/css" rel="stylesheet"   href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/> 
+		
+		<script>
+			//Change Content on page to Tables
+			function displayTables(){
+				document.getElementById('content').innerHTML = "<center><p>To display the desired table, select the name of the table from the drop-down, then click 'Display Table'        </p>" +
+					"<select id='opts'>" +
+						"<option value='student'>Students</option>" +
+						"<option value='course'>Courses</option>" +
+						"<option value='grades'>Grades</option>" +
+					"</select>" + "     " +
+					"<input type='button' onclick='getTable()' value='Display Table'>" +
+					"<br>" +
+					"<div id='out'></div></center>";
+			}
+			
+			//Show desired datatable
+			function showTable(){
+				
+				//Get info from users selected table
+				var choice = $('#opts').get(0);
+				var opt = choice.options[choice.selectedIndex].value;
+				var URL = 'http://localhost:8080/table/?t=' + opt;
+				
+				//Ajax Request
+				$.ajax({
+					type: 'GET',
+					url: URL,
+					data: {},
+					dataType: 'html',
+					success: function(msg){
+						$('#out').html(msg);
+					},
+					error: function(xhr, ajaxOptions, thrownError){
+						alert('Error contacting server');
+					}
+				});
+			}
+		
+			//Change Content on Page to Transcript
+			function displayTrans(){
+				
+				var URL = 'http://localhost:8080/transcripts';
+				
+				//Ajax Request
+				$.ajax({
+					type: 'GET',
+					url: URL,
+					data: '{}',
+					dataType: 'html',
+					success: function(msg){
+						$('#content').html(msg);
+					},
+					error: function(xhr, ajaxOptions, thrownError){
+						alert('Error contacting server');
+					}
+				});
+			}
+			
+			//Show desired transcripts
+			function getTranscript(){
+				//get user selection
+				var stud_dropdown = $('#s_opts').get(0);
+				var term_dropdown = $('#t_opts').get(0);
+				var st_opt = stud_dropdown.options[stud_dropdown.selectedIndex].value; 
+				var te_opt = term_dropdown.options[term_dropdown.selectedIndex].value;
+				
+				var URL = 'http://localhost:8080/getTranscripts/?s=' + st_opt + '?t=' + te_opt;
+				
+				//AJAX request
+				$.ajax({
+					type: 'GET',
+					url: URL,
+					data: {},
+					dataType: 'html',
+					success: function(msg){
+						$('#out').html(msg);
+					},
+					error: function(xhr, ajaxOptions, thrownError){
+						alert('Error contacting server!');
+					}
+				});
+			}
+		</script>	
+	</head>
+	<body>	
+	<div data-role="page" id="page">
+	
+	<!-- A jQuery Mobile Header w/ assignment and menu-->
+		<div data-role="header" data-position="fixed">
+			<h1>Assignment 5</h1>
+			<a href="#myPanel"> Menu </a>
+		</div>
+		
+		<div data-role="panel" id="myPanel" data-display="overlay">
+			<a href="." data-role="button" data-rel="close"> Home </a>
+			<a href="#" onclick="displayTables()" data-role="button"> Database Tables </a>
+			<a href="#" onclick="displayTrans()" data-role="button" data-rel="close"> Transcript </a>
+		</div>
+	
+	<!-- A Content Area -->
+		<div data-role="content" id="content">
+			The purpose of Assignment 5 is three-fold:
+			1. Get experience with MySQL databases, including how to install, set up a database, create
+			and populate relational tables through the MySQL command line interface.
+			2. Interface with a MySQL database through a Nodejs server.
+			3. Gain experience in designing an application/website. As such, this assignment description
+			will not be as explicit as earlier assignments regarding design items such as the presentation
+			of the web page, flow of data between client and server and the organization of the web
+			service code. It will be your responsibility to define the overall application design. Keep in
+			mind your toolset: JavaScript, JQuery, JSON, AJAX, Serving Static Pages, Server
+			Endpoints, Modules, Emitters, etc.… 
+		</div>
+	
+	<!-- A jQuery Mobile Footer w/ Name -->		
+		<div data-role="footer" data-position="fixed">
+			<h4>Brandin Bulicki</h4>
+		</div>	
+	</div>
+		<!--Section to display table-->
+	</body>
+</html>

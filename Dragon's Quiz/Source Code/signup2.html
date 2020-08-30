@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HW5</title>
+		<script>
+		function newstudent() {
+			var name = document.getElementById("name").value;
+			var pw = document.getElementById("password").value;
+			params = {
+				id: studentid,
+				first: first_name,
+				last: last_name,
+				birthdate: birthdate,
+				major: major
+			};
+			$.ajax({
+				type: "POST",
+				url: "./createuser",
+				data: params,
+				success: function(msg){
+					document.getElementById("success").innerHTML = msg;
+					loadnames();
+			}});
+		}
+		</script>
+	</head>
+	<body>
+		<br>
+		<h3>Create a new student:</h3>
+		<p>Name</p><input type="text" id="first">
+		<p>Password</p><input type="password" id="birthdate">
+		<button onclick="newuser()">Submit</button>
+		<div id="success"></div>
+		<br>
+		</div>
+	</body>
+</html>

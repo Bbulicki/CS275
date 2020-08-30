@@ -1,0 +1,125 @@
+<!-- Brandin Bulicki -->
+
+<!doctype html >
+<html>
+<title>
+	Homework 3
+</title>
+<body>
+	<center>
+		<!-- Input a value for the seed -->
+		<h3> Please Input a positive Integer </h3>
+		<input type="text" id="n">
+		<br>
+		<br>
+		<!-- Choose your desired Calculation -->
+		<h3> Please select a Calculation </h3>
+		<select id="calculation">
+			<option value="fact">Factorial</option>
+			<option value="sum">Summation</option>
+		</select>
+		<br>
+		<br>
+		<!-- Button to Launch -->
+		<button id="begin" onclick="SumOrFact()">Calculate</button>
+		
+		<div id="result">
+		
+		<div>
+	</center>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+	function fact(n){
+
+		URL = "http://localhost:8080/fact?input="+n;
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{n}",
+			datatype: "html",
+			success: function(msg)
+			{	
+				document.getElementById("display").innerHTML="The summation for" + n +" is " + msg;
+			},
+			error: function()
+			{
+				alert("Error 404 : Cannot reach server");
+			}
+		});	
+	}
+
+	function sum(n){
+
+		URL = "http://localhost:8080/sum?input="+n;
+		$.ajax({
+			type: "GET",
+			url: URL,
+			contentType:"application/json; charset=utf-8",
+			data:"{n}",
+			datatype: "html",
+			success: function(msg)
+			{	
+				document.getElementById("display").innerHTML="The summation for" + n +" is " + msg;
+			},
+			error: function()
+			{
+				alert("Error 404 : Cannot reach server");
+			}
+		});	
+}
+	function SumOrFact(){
+
+		//Getting the integer in the text box specified by ID "n"
+		var val = parseInt(document.getElementById("n").value);
+
+		//Creating a variable for the selection box specified by ID "fact_sum"
+		var selected = document.getElementById("calculation").value;
+
+		if (isNaN(val) || val < 0){	//If the input value is not an integer or a negative integer
+			//Alert the user to enter a valid integer
+			alert("Please enter a valid integer!");
+		}else{
+			if (selected == "fact"){ //If the value of selection is "fact"
+				fact(val);
+			}else if (selected == "sum"){	//If the value of selection is "sum"
+				sum(val);
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
+
+

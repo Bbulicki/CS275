@@ -1,0 +1,89 @@
+<!--
+Brandin Bulicki
+CS270-003
+HW2
+-->
+<!DOCTYPE html>
+<html>
+	<style type="text/css"> div#footer {position: fixed;}</style>
+	
+	<title> bjb366 Weather </title>
+	<h1><center> 5 Day Weather Forcast </center></h1>
+	<body>
+		<center>
+			<br>
+			<br>
+			<br>
+			<!--Text Enter Key-->
+			<p> Please enter Key </p>
+			<input type="text" id="key">
+			<br>
+			<p> Please Enter Zip Code </p>
+			<!--Text Enter Zip Code-->
+			<input type="text" id="zip">
+			<br>
+			<br>
+			<!--Button Launch 3day3hr-->
+			<button id="computeday" onclick="getUrl()">Compute Forcast</button>
+			<br>
+			<!--Empty Div-->
+			<div id="display"></div>
+		</center>
+	</body>
+	<br>
+	<br>
+	<div id="footer">
+	<footer><center>Created By Brandin Bulicki</center></footer>
+	</div>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script>
+			
+		
+		
+		//This function creates the url and launches a request for the hourly format 
+		function getUrl(){
+		
+			//Extract the key and zipcode
+			var key1 = document.getElementById("key").value;
+			var zipcode = document.getElementById("zip").value;
+			
+			//Create a url request to obtain 5 day / 3 hour
+			var URL = "https://api.openweathermap.org/data/2.5/forecast?zip=" + zipcode + "&appid=" + key1 + "&units=imperial"  ;
+			
+			//AJAX request to get hourly forcast
+			$.ajax({
+				type:"GET", //Getting information
+				
+				url: URL, //Data is located at the url provided
+				
+				contentType:"application/json; charset=utf-8", //Data type is json
+				
+				data:"{}", //No data is sent during call
+				
+				dataType:"jsonp", //Data ir returned as parsed json
+				
+				success: function(msg) //Function called if AJAX successful
+				{
+					//store the returned the json data
+					var json = msg;
+					var times = json.list
+					
+					//Update Website with Table
+					document.getElementById("display").innerHTML = '<table width="90%"><tbody><tr><th width="30%">Date & Time</th><th width="30%">Weather Description</th><th width="30%">Temperature (F)</th></tr>';
+					for (var i=0; i<times.length; i++){
+						document.getElementById("display").innerHTML += ('<table width="90%"><tr><td width="30%"><center>' + json.list[i].dt_txt + '</center></td><td width="30%"><center>' + json.list[i].weather[0].description + '</center></td><td width="30%">' + json.list[i].main.temp + '</td></tr></table>');
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) { //Error handling
+					document.getElementById("display").innerHTML = "Error Fetching " + URL
+				}
+			});			
+		}
+		
+	</script>
+	<script>
+		$( ":header" ).css({ background: "#ccc", color: "blue" , position: "fixed"});
+	</script>
+	
+
+</html>
